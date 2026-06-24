@@ -545,10 +545,17 @@ body {
     color: var(--primary-color);
 }
 
-.line-icon { background-color: rgba(6, 199, 85, 0.08); }
-.tiktok-icon { background-color: rgba(1, 1, 1, 0.06); }
-.facebook-icon { background-color: rgba(24, 119, 242, 0.08); }
-.instagram-icon { background-color: rgba(225, 48, 108, 0.08); }
+.line-icon { background-color: rgba(6, 199, 85, 0.08); color: var(--line-color); }
+.tiktok-icon { background-color: rgba(1, 1, 1, 0.06); color: var(--tiktok-color); }
+.facebook-icon { background-color: rgba(24, 119, 242, 0.08); color: var(--facebook-color); }
+.instagram-icon { background-color: rgba(225, 48, 108, 0.08); color: var(--instagram-color); }
+
+.kpi-icon-box svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    display: block;
+}
 
 /* ==========================================================================
    5. ANALYTICS & CHARTS STYLING
@@ -698,14 +705,41 @@ body {
     gap: 8px;
 }
 
+.pagination-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.select-pagination {
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.select-pagination:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(201, 139, 111, 0.15);
+}
+
 /* Table Badge Styles */
 .table-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 4px 10px;
     font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 0px;
-    text-align: center;
+    border-radius: 4px;
 }
 
 .badge-line {

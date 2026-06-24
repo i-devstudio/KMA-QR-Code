@@ -200,6 +200,14 @@ body {
     height: 20px;
 }
 
+/* Social Icon PNG Images */
+.social-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
 /* Specific Social Brand Colors */
 .line-btn .icon-wrapper {
     background-color: var(--line-color);
