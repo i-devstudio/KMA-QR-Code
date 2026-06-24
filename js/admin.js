@@ -334,10 +334,10 @@ class AdminDashboard {
         
         // กรอก Mock Links ในฟอร์มแอดมินสำหรับเดโม
         const demoLinks = {
-            LINE: "https://line.me/R/ti/p/@kma_cosmetics",
-            TikTok: "https://www.tiktok.com/@kma.cosmetics",
-            Facebook: "https://www.facebook.com/kmacosmetics",
-            Instagram: "https://www.instagram.com/kma_cosmetics_thailand"
+            LINE: "https://line.me/R/ti/p/@864hngdj?oat__id=4963057",
+            TikTok: "https://www.tiktok.com/@kmacosmetics",
+            Facebook: "https://www.facebook.com/kmacosmetics/?locale=th_TH",
+            Instagram: "https://www.instagram.com/kmacosmetics/"
         };
         this.populateSettingsForm(demoLinks);
     }
