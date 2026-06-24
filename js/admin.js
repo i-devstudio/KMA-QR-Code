@@ -79,6 +79,7 @@ class AdminDashboard {
         this.paginationText = document.getElementById("pagination-text");
         this.prevPageBtn = document.getElementById("prev-page");
         this.nextPageBtn = document.getElementById("next-page");
+        this.itemsPerPageSelect = document.getElementById("items-per-page");
 
         // Social Links Settings inputs & status
         this.settingsForm = document.getElementById("settings-form");
@@ -134,6 +135,15 @@ class AdminDashboard {
             }
         });
 
+        // Pagination Items Per Page Selector Change
+        if (this.itemsPerPageSelect) {
+            this.itemsPerPageSelect.addEventListener("change", (e) => {
+                this.itemsPerPage = parseInt(e.target.value, 10);
+                this.currentPage = 1;
+                this.renderLogsTable();
+            });
+        }
+
         // Settings Form Submit
         if (this.settingsForm) {
             this.settingsForm.addEventListener("submit", (e) => {
@@ -180,20 +190,18 @@ class AdminDashboard {
         this.setLoginLoading(true);
         this.loginErrorMsg.style.display = "none";
 
-        // จำลองการเรียกใช้ API หรือยิงตรงไปยัง GAS
+        // ตรวจสอบเงื่อนไขการใช้โหมดสาธิตแบบออฟไลน์/การตั้งค่า API ว่าง
         if (!GAS_API_URL) {
-            // กรณีไม่มี API URL (ทดสอบด้วย Mock Data บน Front)
             setTimeout(() => {
-                if (password === "admin" || password === "kma_admin_password") {
+                if (password === "kma1234" || password === "admin" || password === "kma_admin_password") {
                     this.setPassword(password);
                     this.showDashboard();
                     this.setLoginLoading(false);
-                    // ใช้ Mock Data
                     this.loadMockData();
                 } else {
                     this.setLoginLoading(false);
                     this.loginErrorMsg.style.display = "block";
-                    this.loginErrorMsg.textContent = "รหัสผ่านไม่ถูกต้อง (ลองใช้: kma_admin_password)";
+                    this.loginErrorMsg.textContent = "รหัสผ่านไม่ถูกต้อง (ลองใช้: kma1234)";
                 }
             }, 800);
         } else {
@@ -204,10 +212,27 @@ class AdminDashboard {
                     this.setPassword(password);
                     this.showDashboard();
                 } else {
-                    this.loginErrorMsg.style.display = "block";
-                    this.loginErrorMsg.textContent = error === "Unauthorized" 
-                        ? "รหัสผ่านผู้ดูแลระบบไม่ถูกต้อง!" 
-                        : `เกิดข้อผิดพลาดในการดึงข้อมูล: ${error}`;
+                    // หากเกิดข้อผิดพลาดในการเชื่อมต่อเน็ตเวิร์ก/CORS/หน้าเว็บอื่น (ที่ไม่ใช่รหัสผ่านผิดตัวตรงๆ Unauthorized)
+                    // และผู้ใช้งานใส่รหัสผ่านที่ถูกต้องสำหรับระบบหรือโหมดเดโม เช่น kma1234
+                    // ให้ความสะดวกในการข้ามเข้าไปดูหน้าแดชบอร์ดจำลองเพื่อทดลองใช้งาน
+                    if (error !== "Unauthorized" && (password === "kma1234" || password === "admin" || password === "kma_admin_password")) {
+                        console.warn("API Connection failed, falling back to Demo Mode:", error);
+                        this.setPassword(password);
+                        this.showDashboard();
+                        this.loadMockData();
+                        
+                        // แสดงสถานะเตือนสีแดงในหน้าแดชบอร์ด
+                        if (this.apiStatus) {
+                            this.apiStatus.innerHTML = `<span class="status-dot red"></span> เชื่อมต่อล้มเหลว (ใช้ข้อมูลจำลอง)`;
+                        }
+                        
+                        alert(`เกิดข้อผิดพลาดในการเชื่อมต่อ Google Sheets API: ${error}\n\nระบบเข้าสู่โหมดจำลอง (Demo Mode) ให้คุณเข้าใช้งานเพื่อความปลอดภัยชั่วคราวแล้วครับ`);
+                    } else {
+                        this.loginErrorMsg.style.display = "block";
+                        this.loginErrorMsg.textContent = error === "Unauthorized" 
+                            ? "รหัสผ่านผู้ดูแลระบบไม่ถูกต้อง!" 
+                            : `เกิดข้อผิดพลาดในการดึงข้อมูล: ${error}`;
+                    }
                 }
             });
         }
@@ -265,8 +290,8 @@ class AdminDashboard {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // บันทึกข้อมูลดิบ (เรียงจากใหม่ไปเก่าสำหรับตาราง)
-                    this.rawClicks = data.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    // บันทึกข้อมูลดิบ (เรียงจากใหม่ไปเก่าสำหรับตาราง ปลอดภัยสำหรับ Safari)
+                    this.rawClicks = data.data.sort((a, b) => new Date(b.timestamp.replace(/-/g, "/")) - new Date(a.timestamp.replace(/-/g, "/")));
                     // อัปเดตข้อมูลลิงก์ในฟอร์ม
                     if (data.links) {
                         this.populateSettingsForm(data.links);
@@ -334,10 +359,10 @@ class AdminDashboard {
         
         // กรอก Mock Links ในฟอร์มแอดมินสำหรับเดโม
         const demoLinks = {
-            LINE: "https://line.me/R/ti/p/@864hngdj?oat__id=4963057",
-            TikTok: "https://www.tiktok.com/@kmacosmetics",
-            Facebook: "https://www.facebook.com/kmacosmetics/?locale=th_TH",
-            Instagram: "https://www.instagram.com/kmacosmetics/"
+            LINE: "https://line.me/R/ti/p/@kma_cosmetics",
+            TikTok: "https://www.tiktok.com/@kma.cosmetics",
+            Facebook: "https://www.facebook.com/kmacosmetics",
+            Instagram: "https://www.instagram.com/kma_cosmetics_thailand"
         };
         this.populateSettingsForm(demoLinks);
     }
@@ -728,18 +753,28 @@ class AdminDashboard {
         pageItems.forEach((item, index) => {
             const rowNumber = total - (startIndex + index); // นับลำดับถอยหลัง
             
-            // สร้าง badge สำหรับช่องทางต่างๆ เพื่อความสวยงาม
+            // สร้าง badge สำหรับช่องทางต่างๆ เพื่อความสวยงาม พร้อม SVG ไอคอน
             let badgeClass = "";
-            if (item.social === "LINE") badgeClass = "badge-line";
-            else if (item.social === "TikTok") badgeClass = "badge-tiktok";
-            else if (item.social === "Facebook") badgeClass = "badge-facebook";
-            else if (item.social === "Instagram") badgeClass = "badge-instagram";
+            let svgIcon = "";
+            if (item.social === "LINE") {
+                badgeClass = "badge-line";
+                svgIcon = `<svg viewBox="0 0 16 16" style="width: 12px; height: 12px; margin-right: 6px; fill: currentColor;"><path d="M9.048 5.727c0-.282.229-.511.512-.511h1.246a.512.512 0 1 1 0 1.022H9.56v1.671h1.246a.512.512 0 1 1 0 1.022H9.56v1.73h1.246a.512.512 0 1 1 0 1.022H9.56a.512.512 0 0 1-.512-.512V5.727zM0 8c0 4.41 3.59 8 8 8 4.41 0 8-3.59 8-8s-3.59-8-8-8C3.59 0 0 3.59 0 8zm8.115-3.332a.498.498 0 0 1 .498.498v5.668a.498.498 0 0 1-.996 0V5.166a.498.498 0 0 1 .498-.498zm-4.004.498v5.668c0 .275-.223.498-.498.498H2.33a.498.498 0 0 1-.498-.498V5.166c0-.275.223-.498.498-.498a.498.498 0 0 1 .498.498v5.17h1.283zm1.968-.498a.498.498 0 0 1 .38.188l2.001 3.036v-2.726a.498.498 0 1 1 .996 0v5.668a.498.498 0 0 1-.383-.188l-1.998-3.035v2.725a.498.498 0 1 1-.996 0V5.166a.498.498 0 0 1 .498-.498z"/></svg>`;
+            } else if (item.social === "TikTok") {
+                badgeClass = "badge-tiktok";
+                svgIcon = `<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; margin-right: 6px; fill: currentColor;"><path d="M12.525.02c1.31-.03 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.06-2.89-.52-4.06-1.39-.77-.57-1.39-1.33-1.89-2.18v7.58c.02 1.83-.53 3.69-1.72 5.07-1.45 1.75-3.88 2.62-6.13 2.22-2.28-.35-4.32-2.02-5.06-4.22-.96-2.73-.24-6.06 1.89-7.98 1.6-1.49 3.86-2.17 6-1.77v4.1c-1.12-.34-2.39-.08-3.23.74-.83.78-1.11 2.05-.68 3.12.39 1.05 1.51 1.78 2.62 1.71 1.25.02 2.37-.91 2.53-2.15.06-.5.03-1.02.03-1.52V.02z"/></svg>`;
+            } else if (item.social === "Facebook") {
+                badgeClass = "badge-facebook";
+                svgIcon = `<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; margin-right: 6px; fill: currentColor;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
+            } else if (item.social === "Instagram") {
+                badgeClass = "badge-instagram";
+                svgIcon = `<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; margin-right: 6px; fill: currentColor;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>`;
+            }
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td>#${rowNumber}</td>
                 <td>${item.timestamp}</td>
-                <td><span class="table-badge ${badgeClass}">${item.social}</span></td>
+                <td><span class="table-badge ${badgeClass}">${svgIcon}${item.social}</span></td>
             `;
             this.logsTableBody.appendChild(tr);
         });

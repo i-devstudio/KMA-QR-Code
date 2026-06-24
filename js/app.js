@@ -6,10 +6,10 @@
 // 1. ตั้งค่าลิงก์สำรอง (Fallback Links) ในกรณีที่ยังดึงข้อมูลจาก API ไม่เสร็จ หรือ API เกิดข้อผิดพลาด
 // ช่วยให้ผู้ใช้ยังคงใช้งานเว็บบอร์ดได้ทันทีโดยไม่ติดขัด
 const FALLBACK_LINKS = {
-    LINE: "https://line.me/R/ti/p/@864hngdj?oat__id=4963057", 
-    TikTok: "https://www.tiktok.com/@kmacosmetics", 
-    Facebook: "https://www.facebook.com/kmacosmetics/?locale=th_TH", 
-    Instagram: "https://www.instagram.com/kmacosmetics/" 
+    LINE: "https://line.me/R/ti/p/@kma_cosmetics", 
+    TikTok: "https://www.tiktok.com/@kma.cosmetics", 
+    Facebook: "https://www.facebook.com/kmacosmetics", 
+    Instagram: "https://www.instagram.com/kma_cosmetics_thailand" 
 };
 
 // 2. ลิงก์สำหรับใช้งานจริงในโปรแกรม (จะอัปเดตเป็นค่าจาก Google Sheets เมื่อดึงข้อมูลเสร็จ)
@@ -67,7 +67,7 @@ function fetchLatestLinks() {
 }
 
 /**
- * ส่งสถิติคลิกไปยังหลังบ้านและเปลี่ยนทิศทางเพจ
+ * ส่งสถิติคลิกไปยังหลังบ้านและเปลี่ยนทิศทางเพจ พร้อมข้อมูลวิเคราะห์เครื่องผู้ใช้
  */
 function trackAndRedirect(social, url) {
     console.log(`กำลังบันทึกสถิติและเตรียมไปที่: ${social} -> ${url}`);
@@ -87,16 +87,23 @@ function trackAndRedirect(social, url) {
         }
     }, 250); // ดีเลย์ไม่เกิน 250ms เพื่อประสบการณ์ที่รวดเร็ว
 
+    // รวบรวมข้อมูลผู้ใช้งานเพื่อการตลาด
+    const clickData = {
+        action: "trackClick",
+        social: social,
+        device: getDeviceType(),
+        browser: getBrowserType(),
+        language: navigator.language || "",
+        userAgent: navigator.userAgent || ""
+    };
+
     fetch(GAS_API_URL, {
         method: "POST",
         mode: "cors",
         headers: {
             "Content-Type": "text/plain;charset=utf-8"
         },
-        body: JSON.stringify({
-            action: "trackClick",
-            social: social
-        }),
+        body: JSON.stringify(clickData),
         signal: controller.signal
     })
     .then(response => {
@@ -114,4 +121,36 @@ function trackAndRedirect(social, url) {
         console.warn("สถิติไม่ถูกส่ง/ล้มเหลว แต่เปลี่ยนหน้าจอไปยังเป้าหมาย:", error);
         window.location.href = url;
     });
+}
+
+// ─────────────────────────────────────────────
+// Helpers: ตรวจสอบประเภทอุปกรณ์และเบราว์เซอร์ของผู้ใช้งาน
+// ─────────────────────────────────────────────
+function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return "iOS (iPhone/iPad)";
+    if (/android/i.test(ua)) return "Android Device";
+    if (/Macintosh/i.test(ua)) return "macOS (Mac)";
+    if (/Windows/i.test(ua)) return "Windows PC";
+    if (/Linux/i.test(ua)) return "Linux PC";
+    return "Unknown Device";
+}
+
+function getBrowserType() {
+    const ua = navigator.userAgent;
+    
+    // ตรวจสอบ WebView/Browser ในแอปโซเชียลมีเดียต่างๆ
+    if (/Line/i.test(ua)) return "LINE App Browser";
+    if (/FBAV|FBAN/i.test(ua)) return "Facebook App";
+    if (/Instagram/i.test(ua)) return "Instagram App";
+    if (/Twitter/i.test(ua)) return "Twitter App";
+    if (/TikTok/i.test(ua)) return "TikTok App";
+    
+    // เบราว์เซอร์ปกติ
+    if (/CriOS/i.test(ua) || (/Chrome/i.test(ua) && !/Edge|Edg/i.test(ua))) return "Chrome";
+    if (/Safari/i.test(ua) && !/Chrome/i.test(ua) && !/CriOS/i.test(ua)) return "Safari";
+    if (/Firefox/i.test(ua)) return "Firefox";
+    if (/Edge|Edg/i.test(ua)) return "Edge";
+    
+    return "Mobile WebView / Other";
 }
