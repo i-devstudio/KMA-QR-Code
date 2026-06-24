@@ -16,7 +16,7 @@ const FALLBACK_LINKS = {
 let activeSocialLinks = { ...FALLBACK_LINKS };
 
 // 3. URL ของ Google App Script Web App API 
-const GAS_API_URL = ""; 
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx9lnbHD8XCVe4pH5U6csiZxpSYdSrGvWRnG6LLhjvi0KUrviijNEWKBG5Ns4gsn5nl/exec"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     // โหลดลิงก์ล่าสุดจาก Google Sheets
