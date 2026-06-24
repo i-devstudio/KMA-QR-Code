@@ -1,0 +1,367 @@
+/* KMA Cosmetics - Social Hub Stylesheet */
+
+/* CSS Variables */
+:root {
+    --primary-color: #C98B6F;
+    --primary-light: #E5BCA9;
+    --primary-dark: #A36449;
+    --bg-color: #FFFFFF;
+    --text-color: #222222;
+    --text-muted: #666666;
+    --border-radius: 0px;
+    --button-radius: 0px;
+    
+    /* Social Colors */
+    --line-color: #06C755;
+    --tiktok-color: #010101;
+    --facebook-color: #1877F2;
+    --instagram-color: #E1306C;
+    
+    /* System Font */
+    --font-family: 'Noto Sans Thai', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    /* Shadows */
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 12px 40px rgba(201, 139, 111, 0.15);
+    --shadow-hover: 0 15px 35px rgba(201, 139, 111, 0.25);
+}
+
+/* Reset Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Decorative Background */
+.background-decor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+}
+
+.circle-1 {
+    top: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background-color: var(--primary-color);
+}
+
+.circle-2 {
+    bottom: -10%;
+    left: -10%;
+    width: 350px;
+    height: 350px;
+    background-color: var(--primary-light);
+}
+
+/* Layout Container */
+.container {
+    width: 100%;
+    max-width: 500px; /* Default Mobile-first container size */
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.kma-logo-img {
+    width: 130px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kma-logo-img:hover {
+    transform: scale(1.04);
+}
+
+.headline {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.subheadline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* Social Buttons Styling */
+.social-channels {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Space between buttons: 12px - 16px */
+    flex-grow: 1;
+    justify-content: center;
+    max-width: 100%;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px; /* Height must be at least 56px */
+    background: #FFFFFF;
+    border: 1px solid rgba(221, 221, 221, 0.4);
+    border-radius: var(--button-radius);
+    padding: 0 20px;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Social Button Hover States */
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+}
+
+/* Social Button Active (Click) States */
+.social-btn:active {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Icon Wrapper */
+.icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    color: #FFFFFF;
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover .icon-wrapper {
+    transform: scale(1.1);
+}
+
+/* Social Icon SVGs */
+.social-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Specific Social Brand Colors */
+.line-btn .icon-wrapper {
+    background-color: var(--line-color);
+}
+.line-btn:hover {
+    border-color: var(--line-color);
+}
+
+.tiktok-btn .icon-wrapper {
+    background-color: var(--tiktok-color);
+}
+.tiktok-btn:hover {
+    border-color: var(--tiktok-color);
+}
+
+.facebook-btn .icon-wrapper {
+    background-color: var(--facebook-color);
+}
+.facebook-btn:hover {
+    border-color: var(--facebook-color);
+}
+
+.instagram-btn .icon-wrapper {
+    background-color: var(--instagram-color);
+}
+.instagram-btn:hover {
+    border-color: var(--instagram-color);
+}
+
+/* Text on buttons */
+.social-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    flex-grow: 1;
+}
+
+.social-action {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-right: 8px;
+    font-weight: 300;
+}
+
+/* Arrow Wrapper */
+.arrow-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #CCCCCC;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-btn:hover .arrow-wrapper {
+    transform: translateX(4px);
+    color: var(--primary-color);
+}
+
+.arrow-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.copyright {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+/* Animations */
+.animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media Queries */
+
+/* Tablet Viewports (768px - 1023px) */
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+        padding: 40px 30px;
+    }
+    
+    .social-channels {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 Column Layout */
+        gap: 20px;
+        align-content: center;
+    }
+    
+    .headline {
+        font-size: 1.8rem;
+    }
+    
+    .subheadline {
+        font-size: 1rem;
+        max-width: 400px;
+    }
+}
+
+/* Desktop Viewports (1024px+) */
+@media (min-width: 1024px) {
+    body {
+        background-color: #FAF6F4; /* Sleek elegant warm white for desktop page */
+    }
+    
+    .container {
+        max-width: 1200px;
+        justify-content: center;
+        gap: 40px;
+    }
+    
+    /* Social Hub Card alignment */
+    .social-channels {
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        background: #FFFFFF;
+        padding: 30px;
+        border-radius: 0;
+        box-shadow: var(--shadow-medium);
+        gap: 16px;
+    }
+    
+    .header {
+        margin-bottom: 10px;
+    }
+    
+    .circle-1 {
+        width: 600px;
+        height: 600px;
+    }
+    
+    .circle-2 {
+        width: 500px;
+        height: 500px;
+    }
+}

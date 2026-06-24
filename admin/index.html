@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMA Cosmetics | Admin Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js CDN for Analytics Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="../css/admin.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../KMA_LOGO_Square.png">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+    </div>
+
+    <!-- 1. LOGIN SECTION -->
+    <section id="login-section" class="login-container animate-fade-in">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="../KMA_LOGO_Black_0.png" alt="KMA Cosmetics" class="kma-logo-img">
+            </div>
+            <h2>ระบบวิเคราะห์ข้อมูลสถิติ</h2>
+            <p class="login-desc">กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบแดชบอร์ดแอดมิน</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="password-input">รหัสผ่านแอดมิน</label>
+                    <input type="password" id="password-input" placeholder="กรอกรหัสผ่านเพื่อเข้าใช้งาน" required>
+                    <span class="error-msg" id="login-error-msg">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</span>
+                </div>
+                <button type="submit" class="btn-primary" id="login-submit-btn">
+                    <span>เข้าสู่ระบบ</span>
+                    <div class="spinner hidden" id="login-spinner"></div>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 2. DASHBOARD SECTION (Hidden by default) -->
+    <section id="dashboard-section" class="dashboard-container hidden">
+        <!-- TOP NAVIGATION BAR -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <img src="../KMA_LOGO_Black_0.png" alt="KMA Cosmetics" class="kma-nav-logo">
+                <span class="brand-badge">Dashboard</span>
+            </div>
+            
+            <div class="nav-actions">
+                <span class="api-status-badge" id="api-status">
+                    <span class="status-dot green"></span> เชื่อมต่อ API แล้ว
+                </span>
+                <button id="logout-btn" class="btn-secondary">ออกจากระบบ</button>
+            </div>
+        </nav>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="dashboard-main animate-fade-in">
+            <!-- FILTERS PANEL -->
+            <section class="filters-panel card">
+                <div class="filter-header">
+                    <h3>ตัวกรองข้อมูล</h3>
+                    <span class="filter-subtitle" id="current-filter-text">ช่วงเวลา: วันนี้</span>
+                </div>
+                
+                <div class="filter-controls">
+                    <div class="quick-filters">
+                        <button class="filter-btn active" data-range="today">วันนี้</button>
+                        <button class="filter-btn" data-range="7days">7 วันที่ผ่านมา</button>
+                        <button class="filter-btn" data-range="30days">30 วันที่ผ่านมา</button>
+                        <button class="filter-btn" data-range="custom">กำหนดเอง</button>
+                    </div>
+                    
+                    <div class="custom-date-picker hidden" id="custom-date-picker">
+                        <div class="date-group">
+                            <label for="start-date">เริ่มต้น</label>
+                            <input type="date" id="start-date">
+                        </div>
+                        <div class="date-group">
+                            <label for="end-date">สิ้นสุด</label>
+                            <input type="date" id="end-date">
+                        </div>
+                        <button id="apply-custom-filter" class="btn-primary-sm">ตกลง</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KPI CARDS GRID -->
+            <section class="kpi-grid">
+                <!-- Total Clicks -->
+                <div class="kpi-card card">
+                    <div class="kpi-info">
+                        <span class="kpi-label">จำนวนคลิกทั้งหมด</span>
+                        <h2 class="kpi-value" id="kpi-total">0</h2>
+                    </div>
+                    <div class="kpi-icon-box total-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- LINE Clicks -->
+                <div class="kpi-card card">
+                    <div class="kpi-info">
+                        <span class="kpi-label">LINE OA</span>
+                        <h2 class="kpi-value" id="kpi-line">0</h2>
+                        <span class="kpi-percentage" id="pct-line">0%</span>
+                    </div>
+                    <div class="kpi-icon-box line-icon">
+                        💄
+                    </div>
+                </div>
+
+                <!-- TikTok Clicks -->
+                <div class="kpi-card card">
+                    <div class="kpi-info">
+                        <span class="kpi-label">TikTok</span>
+                        <h2 class="kpi-value" id="kpi-tiktok">0</h2>
+                        <span class="kpi-percentage" id="pct-tiktok">0%</span>
+                    </div>
+                    <div class="kpi-icon-box tiktok-icon">
+                        🎵
+                    </div>
+                </div>
+
+                <!-- Facebook Clicks -->
+                <div class="kpi-card card">
+                    <div class="kpi-info">
+                        <span class="kpi-label">Facebook</span>
+                        <h2 class="kpi-value" id="kpi-facebook">0</h2>
+                        <span class="kpi-percentage" id="pct-facebook">0%</span>
+                    </div>
+                    <div class="kpi-icon-box facebook-icon">
+                        🔵
+                    </div>
+                </div>
+
+                <!-- Instagram Clicks -->
+                <div class="kpi-card card">
+                    <div class="kpi-info">
+                        <span class="kpi-label">Instagram</span>
+                        <h2 class="kpi-value" id="kpi-instagram">0</h2>
+                        <span class="kpi-percentage" id="pct-instagram">0%</span>
+                    </div>
+                    <div class="kpi-icon-box instagram-icon">
+                        📸
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS SECTION (CHARTS & DISTRIBUTION) -->
+            <section class="analytics-layout">
+                <!-- Daily Trend Chart -->
+                <div class="chart-container card">
+                    <div class="card-header">
+                        <h3>กราฟสถิติจำนวนคลิกรายวัน (Daily Trend)</h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Distribution Details -->
+                <div class="distribution-panel card">
+                    <div class="card-header">
+                        <h3>สัดส่วนความนิยมแต่ละช่องทาง</h3>
+                    </div>
+                    
+                    <div class="distribution-list" id="distribution-container">
+                        <!-- LINE Progress -->
+                        <div class="dist-item">
+                            <div class="dist-header">
+                                <span class="dist-name">LINE OA</span>
+                                <span class="dist-values"><strong id="val-line">0</strong> คลิก (<span id="val-pct-line">0%</span>)</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill line-bg" id="bar-line" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- TikTok Progress -->
+                        <div class="dist-item">
+                            <div class="dist-header">
+                                <span class="dist-name">TikTok</span>
+                                <span class="dist-values"><strong id="val-tiktok">0</strong> คลิก (<span id="val-pct-tiktok">0%</span>)</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill tiktok-bg" id="bar-tiktok" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Facebook Progress -->
+                        <div class="dist-item">
+                            <div class="dist-header">
+                                <span class="dist-name">Facebook</span>
+                                <span class="dist-values"><strong id="val-facebook">0</strong> คลิก (<span id="val-pct-facebook">0%</span>)</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill facebook-bg" id="bar-facebook" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Instagram Progress -->
+                        <div class="dist-item">
+                            <div class="dist-header">
+                                <span class="dist-name">Instagram</span>
+                                <span class="dist-values"><strong id="val-instagram">0</strong> คลิก (<span id="val-pct-instagram">0%</span>)</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill instagram-bg" id="bar-instagram" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CLICK LOGS DETAIL TABLE -->
+            <section class="logs-section card">
+                <div class="card-header flex-header">
+                    <h3>ประวัติการบันทึกข้อมูลแบบละเอียด</h3>
+                    <button class="btn-secondary-sm" id="refresh-data-btn">
+                        <span>ดึงข้อมูลล่าสุด</span>
+                    </button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>ลำดับที่</th>
+                                <th>วัน-เวลาที่คลิก</th>
+                                <th>ช่องทางที่เลือก</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <tr>
+                                <td colspan="3" class="empty-message">กำลังโหลดข้อมูล...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-pagination">
+                    <span class="pagination-info" id="pagination-text">แสดง 0 ถึง 0 จาก 0 รายการ</span>
+                    <div class="pagination-controls">
+                        <button id="prev-page" class="btn-pagination" disabled>ก่อนหน้า</button>
+                        <button id="next-page" class="btn-pagination" disabled>ถัดไป</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOCIAL LINKS SETTINGS SECTION -->
+            <section class="settings-section card">
+                <div class="card-header">
+                    <h3>ตั้งค่าลิงก์ Social Channels (Google Sheet Sync)</h3>
+                </div>
+                <form id="settings-form">
+                    <div class="settings-grid">
+                        <div class="form-group">
+                            <label for="link-line">LINE OA Link</label>
+                            <input type="url" id="link-line" placeholder="https://line.me/R/ti/p/..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="link-tiktok">TikTok Link</label>
+                            <input type="url" id="link-tiktok" placeholder="https://www.tiktok.com/..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="link-facebook">Facebook Link</label>
+                            <input type="url" id="link-facebook" placeholder="https://www.facebook.com/..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="link-instagram">Instagram Link</label>
+                            <input type="url" id="link-instagram" placeholder="https://www.instagram.com/..." required>
+                        </div>
+                    </div>
+                    <div class="settings-footer">
+                        <span class="settings-status-msg" id="settings-status-msg"></span>
+                        <button type="submit" class="btn-primary" id="save-settings-btn" style="max-width: 220px; margin-left: auto;">
+                            <span>บันทึกการตั้งค่าลิงก์</span>
+                            <div class="spinner hidden" id="settings-spinner"></div>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </section>
+
+    <!-- JS Logic -->
+    <script src="../js/admin.js"></script>
+</body>
+</html>

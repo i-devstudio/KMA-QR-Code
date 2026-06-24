@@ -1,0 +1,117 @@
+/**
+ * KMA Social Hub - Frontend Logic
+ * จัดการเก็บสถิติการคลิก ดึงลิงก์โซเชียลมีเดียล่าสุดจาก Google Sheets และ Redirect ไปยังปลายทาง
+ */
+
+// 1. ตั้งค่าลิงก์สำรอง (Fallback Links) ในกรณีที่ยังดึงข้อมูลจาก API ไม่เสร็จ หรือ API เกิดข้อผิดพลาด
+// ช่วยให้ผู้ใช้ยังคงใช้งานเว็บบอร์ดได้ทันทีโดยไม่ติดขัด
+const FALLBACK_LINKS = {
+    LINE: "https://line.me/R/ti/p/@kma_cosmetics", 
+    TikTok: "https://www.tiktok.com/@kma.cosmetics", 
+    Facebook: "https://www.facebook.com/kmacosmetics", 
+    Instagram: "https://www.instagram.com/kma_cosmetics_thailand" 
+};
+
+// 2. ลิงก์สำหรับใช้งานจริงในโปรแกรม (จะอัปเดตเป็นค่าจาก Google Sheets เมื่อดึงข้อมูลเสร็จ)
+let activeSocialLinks = { ...FALLBACK_LINKS };
+
+// 3. URL ของ Google App Script Web App API 
+const GAS_API_URL = ""; 
+
+document.addEventListener("DOMContentLoaded", () => {
+    // โหลดลิงก์ล่าสุดจาก Google Sheets
+    fetchLatestLinks();
+
+    const socialButtons = document.querySelectorAll(".social-btn");
+
+    socialButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            const socialName = button.getAttribute("data-social");
+            const redirectUrl = activeSocialLinks[socialName] || FALLBACK_LINKS[socialName];
+
+            if (redirectUrl) {
+                trackAndRedirect(socialName, redirectUrl);
+            } else {
+                console.error(`ไม่พบลิงก์ปลายทางสำหรับ: ${socialName}`);
+            }
+        });
+    });
+});
+
+/**
+ * ดึงข้อมูลลิงก์โซเชียลล่าสุดจาก Google Sheets ผ่าน API ของ GAS
+ * (ทำงานแบบเบื้องหลัง Asynchronous เพื่อรักษาความเร็วในการแสดงผลหน้าแรกให้ < 1 วินาที)
+ */
+function fetchLatestLinks() {
+    if (!GAS_API_URL) {
+        console.log("ใช้งานลิงก์สำรอง (ยังไม่ได้ตั้งค่า API URL)");
+        return;
+    }
+
+    const apiUrl = `${GAS_API_URL}?action=getLinks`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.links) {
+                // บันทึกทับลิงก์ที่ใช้งานอยู่ด้วยข้อมูลล่าสุดจาก Google Sheets
+                activeSocialLinks = { ...data.links };
+                console.log("อัปเดตลิงก์โซเชียลล่าสุดจาก Google Sheet สำเร็จ:", activeSocialLinks);
+            }
+        })
+        .catch(error => {
+            console.error("ไม่สามารถเชื่อมต่อดึงลิงก์ล่าสุดได้ ระบบจะใช้ลิงก์สำรองแทน:", error);
+        });
+}
+
+/**
+ * ส่งสถิติคลิกไปยังหลังบ้านและเปลี่ยนทิศทางเพจ
+ */
+function trackAndRedirect(social, url) {
+    console.log(`กำลังบันทึกสถิติและเตรียมไปที่: ${social} -> ${url}`);
+
+    if (!GAS_API_URL) {
+        window.location.href = url;
+        return;
+    }
+
+    let requestSent = false;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+        if (!requestSent) {
+            controller.abort();
+            console.log("API ตอบสนองช้า ดำเนินการ Redirect ทันที");
+            window.location.href = url;
+        }
+    }, 250); // ดีเลย์ไม่เกิน 250ms เพื่อประสบการณ์ที่รวดเร็ว
+
+    fetch(GAS_API_URL, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+            action: "trackClick",
+            social: social
+        }),
+        signal: controller.signal
+    })
+    .then(response => {
+        requestSent = true;
+        clearTimeout(timeoutId);
+        return response.json();
+    })
+    .then(data => {
+        console.log("บันทึกสถิติสำเร็จ:", data);
+        window.location.href = url;
+    })
+    .catch(error => {
+        requestSent = true;
+        clearTimeout(timeoutId);
+        console.warn("สถิติไม่ถูกส่ง/ล้มเหลว แต่เปลี่ยนหน้าจอไปยังเป้าหมาย:", error);
+        window.location.href = url;
+    });
+}

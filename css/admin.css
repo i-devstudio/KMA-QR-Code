@@ -1,0 +1,863 @@
+/* KMA Cosmetics - Admin Dashboard Stylesheet */
+
+/* CSS Variables */
+:root {
+    --primary-color: #C98B6F;
+    --primary-light: #E5BCA9;
+    --primary-dark: #A36449;
+    --bg-color: #F8F9FA;
+    --card-bg: #FFFFFF;
+    --text-color: #222222;
+    --text-muted: #6C757D;
+    --border-color: #E9ECEF;
+    --border-radius: 0px;
+    --button-radius: 0px;
+    
+    /* Social Colors */
+    --line-color: #06C755;
+    --tiktok-color: #010101;
+    --facebook-color: #1877F2;
+    --instagram-color: #E1306C;
+    
+    /* System Font */
+    --font-family: 'Noto Sans Thai', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.05);
+    --shadow-kpi: 0 10px 25px rgba(201, 139, 111, 0.08);
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Helper Class */
+.hidden {
+    display: none !important;
+}
+
+/* Decorative Background */
+.background-decor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.08;
+}
+
+.circle-1 {
+    top: -10%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background-color: var(--primary-color);
+}
+
+.circle-2 {
+    bottom: -10%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background-color: var(--primary-light);
+}
+
+/* Common UI Elements */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+}
+
+.card-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.card-header h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.flex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ==========================================================================
+   1. LOGIN SECTION STYLING
+   ========================================================================== */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 0px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.login-card .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.login-card .kma-logo-img {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
+}
+
+.login-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.login-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #CED4DA;
+    border-radius: var(--button-radius);
+    padding: 0 16px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(201, 139, 111, 0.15);
+}
+
+.error-msg {
+    display: none;
+    color: #DC3545;
+    font-size: 0.8rem;
+    margin-top: 6px;
+}
+
+.btn-primary {
+    width: 100%;
+    height: 48px;
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--button-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Spinner Loader */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #FFFFFF;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   2. DASHBOARD GENERAL STYLING
+   ========================================================================== */
+.dashboard-container {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Top Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    padding: 16px 24px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kma-nav-logo {
+    width: 70px;
+    height: auto;
+    object-fit: contain;
+}
+
+.brand-badge {
+    background-color: rgba(201, 139, 111, 0.12);
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 0px;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.api-status-badge {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.green {
+    background-color: #28A745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+}
+
+.status-dot.orange {
+    background-color: #FFC107;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #CED4DA;
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: var(--button-radius);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #F1F3F5;
+    border-color: #ADB5BD;
+}
+
+.btn-secondary-sm {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: 0px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary-sm:hover {
+    background-color: rgba(201, 139, 111, 0.08);
+}
+
+.btn-pagination {
+    background-color: #FFFFFF;
+    border: 1px solid #CED4DA;
+    color: var(--text-color);
+    padding: 6px 14px;
+    border-radius: 0px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-pagination:disabled {
+    background-color: #F1F3F5;
+    border-color: var(--border-color);
+    color: #ADB5BD;
+    cursor: not-allowed;
+}
+
+.btn-pagination:not(:disabled):hover {
+    background-color: #F8F9FA;
+    border-color: #ADB5BD;
+}
+
+.btn-primary-sm {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--button-radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary-sm:hover {
+    background-color: var(--primary-dark);
+}
+
+/* ==========================================================================
+   3. FILTERS PANEL STYLING
+   ========================================================================== */
+.filters-panel {
+    margin-bottom: 24px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.filter-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.filter-subtitle {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+}
+
+.quick-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-btn {
+    background-color: #F1F3F5;
+    border: none;
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 0px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: #E9ECEF;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+}
+
+.custom-date-picker {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-left: 12px;
+    border-left: 2px solid var(--border-color);
+}
+
+.date-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.date-group label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.date-group input {
+    height: 34px;
+    border: 1px solid #CED4DA;
+    border-radius: 0px;
+    padding: 0 8px;
+    font-size: 0.8rem;
+    font-family: inherit;
+}
+
+/* ==========================================================================
+   4. KPI CARDS GRID STYLING (Mobile-First 1 Column)
+   ========================================================================== */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    box-shadow: var(--shadow-soft);
+    border-left: 4px solid var(--border-color);
+}
+
+/* KPI Accent Colors */
+.kpi-grid .kpi-card:nth-child(1) { border-left-color: var(--primary-color); } /* Total Clicks */
+.kpi-grid .kpi-card:nth-child(2) { border-left-color: var(--line-color); }    /* LINE */
+.kpi-grid .kpi-card:nth-child(3) { border-left-color: var(--tiktok-color); }  /* TikTok */
+.kpi-grid .kpi-card:nth-child(4) { border-left-color: var(--facebook-color); }/* Facebook */
+.kpi-grid .kpi-card:nth-child(5) { border-left-color: var(--instagram-color); }/* Instagram */
+
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.kpi-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.kpi-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    line-height: 1.1;
+}
+
+.kpi-percentage {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-top: 2px;
+}
+
+.kpi-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    background-color: #F8F9FA;
+}
+
+.total-icon {
+    background-color: rgba(201, 139, 111, 0.08);
+    color: var(--primary-color);
+}
+
+.line-icon { background-color: rgba(6, 199, 85, 0.08); }
+.tiktok-icon { background-color: rgba(1, 1, 1, 0.06); }
+.facebook-icon { background-color: rgba(24, 119, 242, 0.08); }
+.instagram-icon { background-color: rgba(225, 48, 108, 0.08); }
+
+/* ==========================================================================
+   5. ANALYTICS & CHARTS STYLING
+   ========================================================================== */
+.analytics-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Chart Container & Horizontal Scroll on Mobile */
+.chart-container {
+    width: 100%;
+    overflow: hidden; /* ป้องกันหน้าหลักพัง */
+}
+
+.chart-wrapper {
+    width: 100%;
+    overflow-x: auto; /* เปิดแอนิเมชันเลื่อนแนวนอนถ้าบีบ */
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ตั้งขนาดขั้นต่ำของกราฟเพื่อให้อ่านข้อมูลได้ชัดเจนบนมือถือ */
+.chart-wrapper canvas {
+    min-width: 500px;
+    height: 280px !important;
+}
+
+/* Distribution details */
+.distribution-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.distribution-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dist-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dist-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.dist-name {
+    font-weight: 600;
+}
+
+.dist-values {
+    color: var(--text-muted);
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background-color: #E9ECEF;
+    border-radius: 0px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 0px;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Colors of Progress Bars */
+.line-bg { background-color: var(--line-color); }
+.tiktok-bg { background-color: var(--tiktok-color); }
+.facebook-bg { background-color: var(--facebook-color); }
+.instagram-bg { background-color: var(--instagram-color); }
+
+/* ==========================================================================
+   6. CLICK LOGS TABLE STYLING
+   ========================================================================== */
+.logs-section {
+    margin-bottom: 40px;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 0px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.logs-table th,
+.logs-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logs-table th {
+    background-color: #F8F9FA;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.logs-table tr:last-child td {
+    border-bottom: none;
+}
+
+.logs-table tr:hover td {
+    background-color: #F8F9FA;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 30px !important;
+}
+
+/* Table Pagination styling */
+.table-pagination {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.pagination-info {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 8px;
+}
+
+/* Table Badge Styles */
+.table-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0px;
+    text-align: center;
+}
+
+.badge-line {
+    background-color: rgba(6, 199, 85, 0.1);
+    color: var(--line-color);
+    border: 1px solid rgba(6, 199, 85, 0.2);
+}
+
+.badge-tiktok {
+    background-color: rgba(1, 1, 1, 0.06);
+    color: var(--tiktok-color);
+    border: 1px solid rgba(1, 1, 1, 0.1);
+}
+
+.badge-facebook {
+    background-color: rgba(24, 119, 242, 0.1);
+    color: var(--facebook-color);
+    border: 1px solid rgba(24, 119, 242, 0.2);
+}
+
+.badge-instagram {
+    background-color: rgba(225, 48, 108, 0.1);
+    color: var(--instagram-color);
+    border: 1px solid rgba(225, 48, 108, 0.2);
+}
+
+/* ==========================================================================
+   6.5. SOCIAL LINKS SETTINGS STYLING
+   ========================================================================== */
+.settings-section {
+    margin-bottom: 40px;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.settings-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.settings-status-msg {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.settings-status-msg.success {
+    color: #28A745;
+}
+
+.settings-status-msg.error {
+    color: #DC3545;
+}
+
+.settings-status-msg.info {
+    color: var(--primary-color);
+}
+
+/* ==========================================================================
+   7. ANIMATIONS
+   ========================================================================== */
+.animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* ==========================================================================
+   8. MEDIA QUERIES (RESPONSIVE VIEWPORTS)
+   ========================================================================== */
+
+/* Tablet Viewports (768px - 1023px) */
+@media (min-width: 768px) {
+    .dashboard-container {
+        padding: 30px;
+    }
+    
+    /* 2 columns for KPI cards as requested */
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Let the total clicks span across if needed, or keep 2x2 with one occupying full width */
+    .kpi-grid .kpi-card:nth-child(1) {
+        grid-column: span 2; /* Total card spans full-width at top */
+    }
+    
+    .analytics-layout {
+        flex-direction: column;
+    }
+    
+    .chart-wrapper canvas {
+        min-width: 100%; /* No horizontal scrolling needed on tablets */
+    }
+    
+    .table-pagination {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop Viewports (1024px+) */
+@media (min-width: 1024px) {
+    /* 4 Cards per Row for KPI Cards as requested */
+    /* Because we have 5 KPI cards in total, we can arrange them dynamically */
+    .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Make total click wider or occupy first slot and span 2, or let layout auto-flow with 4 per row */
+    .kpi-grid .kpi-card:nth-child(1) {
+        grid-column: span 4; /* Total card takes full row on top for high visual impact */
+        padding: 30px;
+    }
+    
+    /* The next 4 cards (LINE, TikTok, Facebook, Instagram) will form a clean 4-column row underneath */
+    .kpi-grid .kpi-card:not(:nth-child(1)) {
+        grid-column: span 1;
+    }
+    
+    /* Side-by-side Layout for Chart and Distribution percentage */
+    .analytics-layout {
+        flex-direction: row;
+        align-items: stretch;
+    }
+    
+    .chart-container {
+        flex: 2; /* Chart takes 2/3 of space */
+    }
+    
+    .distribution-panel {
+        flex: 1; /* Distribution takes 1/3 of space */
+    }
+    
+    .chart-wrapper canvas {
+        min-width: 100%;
+        height: 320px !important;
+    }
+}
