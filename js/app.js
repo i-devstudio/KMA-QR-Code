@@ -6,10 +6,10 @@
 // 1. ตั้งค่าลิงก์สำรอง (Fallback Links) ในกรณีที่ยังดึงข้อมูลจาก API ไม่เสร็จ หรือ API เกิดข้อผิดพลาด
 // ช่วยให้ผู้ใช้ยังคงใช้งานเว็บบอร์ดได้ทันทีโดยไม่ติดขัด
 const FALLBACK_LINKS = {
-    LINE: "https://line.me/R/ti/p/@kma_cosmetics", 
-    TikTok: "https://www.tiktok.com/@kma.cosmetics", 
-    Facebook: "https://www.facebook.com/kmacosmetics", 
-    Instagram: "https://www.instagram.com/kma_cosmetics_thailand" 
+    LINE: "https://line.me/R/ti/p/@864hngdj?oat__id=4963057", 
+    TikTok: "https://www.tiktok.com/@kmacosmetics", 
+    Facebook: "https://www.facebook.com/kmacosmetics/?locale=th_TH", 
+    Instagram: "https://www.instagram.com/kmacosmetics/" 
 };
 
 // 2. ลิงก์สำหรับใช้งานจริงในโปรแกรม (จะอัปเดตเป็นค่าจาก Google Sheets เมื่อดึงข้อมูลเสร็จ)
